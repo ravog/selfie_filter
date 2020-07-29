@@ -56,6 +56,6 @@ Pueden enviar un archivo por correo si no quieren hacer público el video
 
 #### Keypoint detection
 
-![](keypoint_detection.png)
+![](keypoint_detection.png =150x80)
 
 Dataset: [https://www.kaggle.com/c/facial-keypoints-detection/data](https://www.kaggle.com/c/facial-keypoints-detection/data)
