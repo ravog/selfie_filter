@@ -17,12 +17,14 @@ while(True):
     ret, frame = cap.read()
     #import pdb; pdb.set_trace()
     # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    img = cv2.flip(frame, 1)
 
     # Display the resulting frame
-    cv2.imshow('frame',gray)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    cv2.imshow('frame',img)
+    k = cv2.waitKey(30) & 0xFF
+    if k == 27:
+    	break
 
 # When everything done, release the capture
 cap.release()
