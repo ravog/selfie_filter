@@ -11,9 +11,9 @@ X_test, _ = load_data(test=True)
 print("X_test.shape == {}".format(X_test.shape))
 
 # Import deep learning resources from Keras
-from keras.models import Sequential
-from keras.layers import Convolution2D, MaxPooling2D, Dropout
-from keras.layers import Flatten, Dense
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Convolution2D, MaxPooling2D, Dropout
+from tensorflow.keras.layers import Flatten, Dense
 
 
 ## TODO: Specify a CNN architecture
@@ -48,7 +48,7 @@ model.add(Dense(30))
 # Summarize the model
 model.summary()
 
-from keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam
+from tensorflow.keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam
 
 ## TODO: Compile the model
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
