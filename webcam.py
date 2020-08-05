@@ -10,7 +10,7 @@ cv2.namedWindow("face detection activated")
 cap = cv2.VideoCapture(0)
 face_cascade = cv2.CascadeClassifier('detector_architectures/haarcascade_frontalface_default.xml')
 filter = cv2.imread("images/sunglasses_4.png")
-# Load facial landmark detector model
+# Load facial keypoints detector model
 model = load_model('my_model.h5')
 
 def resize(img, width):
@@ -20,7 +20,7 @@ def resize(img, width):
     return img
 
 while(True):
-    # Wait for ESC key
+    # Wait for Q key
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     # Capture frame-by-frame
@@ -57,12 +57,11 @@ while(True):
         for i, co in enumerate(landmarks[0][0::2]):
             points.append((co, landmarks[0][1::2][i]))
         for landmark_centre in points:
-            import pdb; pdb.set_trace()
             cv2.circle(resized_face_color, landmark_centre, 1, (0,255,0), 1)
             
         resized_face_color = cv2.resize(resized_face_color, original_shape, interpolation = cv2.INTER_CUBIC)
         
-        frame[start_eye_left:start_eye_left+eye_distance, x:x+w] = resized_face_color
+        frame[y:y+h, x:x+w] = resized_face_color
         #cv2.rectangle(frame, (x, y), (x+w, y+h), (255,0,0), 2)
     # Display the resulting frame
     cv2.imshow('webcam',frame)

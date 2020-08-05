@@ -1,0 +1,12 @@
+# IDE
+.idea/
+.DS_Store
+
+# Node
+node_modules/
+images/*.png
+
+server/uploads/documents/*.pdf
+server/uploads/images/*.png
+server/uploads/images/*.jpeg
+server/uploads/images/*.jpg
