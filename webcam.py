@@ -4,12 +4,20 @@
 import numpy as np
 import cv2
 from tensorflow.keras.models import load_model
+import matplotlib.pyplot as plt
 
 cv2.namedWindow("face detection activated")
 cap = cv2.VideoCapture(0)
 face_cascade = cv2.CascadeClassifier('detector_architectures/haarcascade_frontalface_default.xml')
+filter = cv2.imread("images/sunglasses_4.png")
 # Load facial landmark detector model
 model = load_model('my_model.h5')
+
+def resize(img, width):
+    r = float(width) / img.shape[1]
+    dim = (width, int(img.shape[0] * r))
+    img = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+    return img
 
 while(True):
     # Wait for ESC key
@@ -18,11 +26,11 @@ while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
     frame = cv2.flip(frame, 1)
-    #image_copy = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     #cv2.rectangle(frame,(400,150),(560,300),(0,255,0), 3)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.25,6)
     for (x, y, w, h) in faces:
+        current_filter = cv2.resize(filter, (w, h), interpolation = cv2.INTER_AREA)
         #cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255,0), 3)
         gray_face_slice = gray[y:y+h, x:x+w]
         color_face_slice = frame[y:y+h, x:x+w]
@@ -49,14 +57,13 @@ while(True):
         for i, co in enumerate(landmarks[0][0::2]):
             points.append((co, landmarks[0][1::2][i]))
         for landmark_centre in points:
-        #         print(landmark_centre)
+            import pdb; pdb.set_trace()
             cv2.circle(resized_face_color, landmark_centre, 1, (0,255,0), 1)
             
         resized_face_color = cv2.resize(resized_face_color, original_shape, interpolation = cv2.INTER_CUBIC)
         
-        frame[y:y+h, x:x+w] = resized_face_color
-        
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (255,0,0), 2)
+        frame[start_eye_left:start_eye_left+eye_distance, x:x+w] = resized_face_color
+        #cv2.rectangle(frame, (x, y), (x+w, y+h), (255,0,0), 2)
     # Display the resulting frame
     cv2.imshow('webcam',frame)
 
