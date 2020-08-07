@@ -1,3 +1,22 @@
+# Como usar
+
+* Clonar el repositorio
+
+* Hacer el install de los requirements.txt
+
+* Correr el script python webcam.py, la aplicacion acepta las siguientes teclas:
+
+	* *Q* : Termina la app y cierra todas las ventanas.
+	
+	* *R* : Limpia el filtro que se esta mostrando, dejando como estaba al inicio.
+	
+	* *1* : Marca los keypoints en color verde en cada cara encontrada.
+	
+	* *2* : Coloca un lente de sol en cada cara encontrada.
+	
+	* *3* : Difumina cada cara encontrada.
+
+
 # selfie_filter
 
 Mateo Torres, PhD @torresmateo
