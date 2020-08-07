@@ -4,7 +4,6 @@
 import numpy as np
 import cv2
 from tensorflow.keras.models import load_model
-from sys import exit
 
 # Constantes
 X = 0  # indice de la coordenada X del keypoint
@@ -35,19 +34,19 @@ action_key = 255
 
 
 # Fucniones
-def draw_marks(keypoints, image):
+def draw_marks(x, y, w, h, keypoints, image):
     for keypoint_centre in keypoints:
         cv2.circle(image, keypoint_centre, 1, (0,255,0), 1)
 
     return image
 
 
-def put_sunglasses(keypoints, image):
+def put_sunglasses(x, y, w, h, keypoints, image):
     right_eye_brow_outer_x = int(keypoints[R_EYE_BROW_OUTER][X])
     right_eye_brow_outer_y = int(keypoints[R_EYE_BROW_OUTER][Y])
 
-    sunglasses_height = int((keypoints[NOSE][Y] - right_eye_brow_outer_y) / 1.5)
-    sunglasses_width = int((keypoints[L_EYE_BROW_OUTER][X] - right_eye_brow_outer_x) * 1.1)
+    sunglasses_height = int((keypoints[NOSE][Y] - right_eye_brow_outer_y) / 1.1)
+    sunglasses_width = int((keypoints[L_EYE_BROW_OUTER][X] - right_eye_brow_outer_x))
 
     sunglasses_resized = cv2.resize(sunglasses, (sunglasses_width, sunglasses_height))
     alpha_region = sunglasses_resized[:, :, 3] != 0
@@ -58,8 +57,14 @@ def put_sunglasses(keypoints, image):
 
     return image
 
+def hide_face(x, y, w, h,keypoints, image):
+    kernel = np.ones((100, 100), np.float32) / 10000
+    image = cv2.filter2D(image, -1, kernel)
 
-def reset(keypoints, image):
+    return image
+
+
+def reset(x, y, w, h,keypoints, image):
     action_key = 255
 
     return image
@@ -68,7 +73,7 @@ def reset(keypoints, image):
 ACTIONS = {
     49: draw_marks,  # Tecla 1
     50: put_sunglasses,  # Tecla 2
-    51: '',  # Tecla 3
+    51: hide_face,  # Tecla 3
     114: reset,  # Tecla R
 }
 
@@ -101,7 +106,7 @@ while (True):
                 keypoints = []
                 for i, co in enumerate(landmarks[0][0::2]):
                     keypoints.append((co, landmarks[0][1::2][i]))
-                resized_face_color = ACTIONS[action_key](keypoints, resized_face_color)
+                resized_face_color = ACTIONS[action_key](x, y, w, h, keypoints, resized_face_color)
                 resized_face_color = cv2.resize(resized_face_color, original_shape, interpolation=cv2.INTER_CUBIC)
                 frame[y:y + h, x:x + w] = resized_face_color
     cv2.imshow('webcam', frame)  # Display the resulting frame
